@@ -1,0 +1,17 @@
+{{- if .Values.quickstatements.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: quickstatements
+  labels:
+    {{- include "wikibase.labels" . | nindent 4 }}
+spec:
+  ports:
+    - name: quickstatements
+      port: {{ .Values.quickstatements.service.port }}
+      targetPort: 80
+  selector:
+    matchLabels:
+      app: quickstatements
+      {{- include "wikibase.labels" . | nindent 6 }}
+{{- end -}}
