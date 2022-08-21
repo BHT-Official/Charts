@@ -1,0 +1,17 @@
+{{- if and .Values.queryservice.enabled .Values.queryservice.ui.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: queryservice-ui
+  labels:
+    {{- include "wikibase.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      app: queryservice-ui
+      {{- include "wikibase.labels" . | nindent 6 }}
+  ports:
+    - name: http
+      port: {{ .Values.queryservice.ui.port }}
+      targetPort: http
+{{- end -}}

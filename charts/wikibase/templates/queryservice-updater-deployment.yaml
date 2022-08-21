@@ -1,0 +1,34 @@
+{{- if and .Values.queryservice.enabled .Values.queryservice.updater.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: queryservice-updater
+  labels:
+    {{- include "wikibase.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: queryservice-updater
+      {{- include "wikibase.labels" . | nindent 6 }}
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: queryservice-updater
+        {{- include "wikibase.labels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: queryservice-updater
+          args:
+            - /runUpdate.sh
+          env:
+            - name: WDQS_HOST
+              value: "queryservice.$(NAMESPACE).svc.cluster.local"
+            - name: WDQS_PORT
+              value: {{ .Values.queryservice.port | quote }}
+            - name: WIKIBASE_HOST
+              value: "wikibase.$(NAMESPACE).svc.cluster.local"
+          image: "{{ .Values.queryservice.updater.image.repository }}:{{ .Values.queryservice.updater.image.tag }}"
+      restartPolicy: Always
+{{- end -}}
