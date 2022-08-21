@@ -5,6 +5,39 @@ global:
       enabled: true
       size: 20Gi
 
+wikibase:
+  enabled: true
+  service:
+    port: 80
+  image:
+    repository: wikibase/wikibase-bundle
+    tag: 1.36.3-wmde.6
+  persistence:
+    enabled: true
+    size: 40Gi
+  auth:
+    admin:
+      username: "admin"
+      password: "password"
+      email: "admin@example.com"
+    secret: "some-secret"
+    externalDatabase:
+      enabled: false  # Set to true if want to use external database (also set mariadb.enabled to false).
+      # host: "wikibase-mariadb.example.com"
+      # port: 3306
+      # user: "wikibase"
+      # password: "password"
+      # database: "wikibase"
+  jobrunner:
+    enabled: true
+    image:
+      repository: wikibase/wikibase-bundle
+      tag: 1.36.3-wmde.6
+    runRate: 1
+    persistence:
+      enabled: true
+      size: 40Gi
+
 mariadb:
   enabled: true # Set to false if want to use external database (also set wikibase.externalDatabase for connection info).
   global:
@@ -14,7 +47,7 @@ mariadb:
     tag: 10.6.9
     pullPolicy: IfNotPresent
   auth:
-    rootPassword: ""
+    rootPassword: "" # Leave empty to auto-generate a random password.
     username: "wikibase"
     password: "password"
     database: "wikibase"
@@ -25,17 +58,6 @@ mariadb:
     persistence:
       enabled: true
       size: 20Gi
-
-elasticsearch:
-  enabled: true
-  service:
-    port: 9200
-  image:
-    repository: wikibase/elasticsearch
-    tag: 6.8.23-wmde.6
-  persistence:
-    enabled: true
-    size: 10Gi
 
 queryservice:
   enabled: true
@@ -85,35 +107,13 @@ quickstatements:
     enabled: true
     size: 40Gi
 
-wikibase:
+elasticsearch:
   enabled: true
   service:
-    port: 80
+    port: 9200
   image:
-    repository: wikibase/wikibase-bundle
-    tag: 1.36.3-wmde.6
+    repository: wikibase/elasticsearch
+    tag: 6.8.23-wmde.6
   persistence:
     enabled: true
-    size: 40Gi
-  auth:
-    admin:
-      username: "admin"
-      password: "password"
-      email: "admin@example.com"
-    secret: "some-secret"
-    externalDatabase:
-      enabled: false  # Set to true if want to use external database (also set mariadb.enabled to false).
-      # host: "wikibase-mariadb.example.com"
-      # port: 3306
-      # user: "wikibase"
-      # password: "password"
-      # database: "wikibase"
-  jobrunner:
-    enabled: true
-    image:
-      repository: wikibase/wikibase-bundle
-      tag: 1.36.3-wmde.6
-    runRate: 1
-    persistence:
-      enabled: true
-      size: 40Gi
+    size: 10Gi
