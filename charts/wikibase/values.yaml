@@ -37,10 +37,10 @@ wikibase:
     image:
       repository: wikibase/wikibase-bundle
       tag: 1.36.3-wmde.5
-    runRate: 1
+    runRate: 4
     persistence:
       enabled: true
-      size: 40Gi
+      size: 10Gi
 
 mariadb:
   enabled: true # Set to false if want to use external database (also set wikibase.externalDatabase for connection info).
