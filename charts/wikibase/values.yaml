@@ -19,11 +19,11 @@ wikibase:
   auth:
     admin:
       username: "admin"
-      password: "password"
+      password: "p@ssw0rd-123"
       email: "admin@example.com"
-    secret: "some-secret"
+    secret: "some-secret-gsdgfhndf@-YDK"
     externalDatabase:
-      enabled: false  # Set to true if want to use external database (also set mariadb.enabled to false).
+      enabled: false # Set to true if want to use external database (also set mariadb.enabled to false).
       # host: "wikibase-mariadb.example.com"
       # port: 3306
       # user: "wikibase"
@@ -34,7 +34,7 @@ wikibase:
     image:
       repository: wikibase/wikibase-bundle
       tag: 1.36.3-wmde.5
-    runRate: 4
+    runRate: 1
 
 mariadb:
   enabled: true # Set to false if want to use external database (also set wikibase.externalDatabase for connection info).
@@ -104,11 +104,11 @@ quickstatements:
     - name: WB_ITEM_NAMESPACE
       value: "120"
     - name: WB_ITEM_PREFIX
-      value: 'Item:'
+      value: "Item:"
     - name: WB_PROPERTY_NAMESPACE
       value: "122"
     - name: WB_PROPERTY_PREFIX
-      value: 'Property:'
+      value: "Property:"
   persistence:
     enabled: true
     size: 10Gi
