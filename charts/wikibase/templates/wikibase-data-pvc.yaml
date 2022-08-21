@@ -1,0 +1,27 @@
+{{- if .Values.wikibase.enabled -}}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: wikibase-data
+  labels:
+    {{- include "wikibase.labels" . | nindent 4 }}
+  annotations:
+  {{- if .Values.wikibase.persistence.storageClass }}
+    volume.beta.kubernetes.io/storage-class: {{ .Values.wikibase.storageClass | quote }}
+  {{- else }}
+    volume.beta.kubernetes.io/storage-class: "default"
+  {{- end }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.wikibase.volume.size | quote }}
+    {{- if .Values.wikibase.persistence.storageClass }}
+    {{- if (eq "-" .Values.wikibase.persistence.storageClass) }}
+      storageClassName: ""
+    {{- else }}
+      storageClassName: {{ .Values.wikibase.persistence.storageClass | quote }}
+    {{- end }}
+    {{- end }}
+{{- end -}}
