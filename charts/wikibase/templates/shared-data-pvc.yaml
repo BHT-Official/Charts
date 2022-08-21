@@ -6,7 +6,7 @@ metadata:
   labels:
     {{- include "wikibase.labels" . | nindent 4 }}
   annotations:
-  volume.beta.kubernetes.io/storage-class: {{ (.Values.global.shared.persistence.storageClass | quote) | default "default" }}
+    volume.beta.kubernetes.io/storage-class: {{ (.Values.global.shared.persistence.storageClass | quote) | default "default" }}
 spec:
   accessModes:
     - ReadWriteOnce
