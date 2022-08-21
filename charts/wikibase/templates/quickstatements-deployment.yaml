@@ -28,14 +28,10 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
-            - name: QS_PUBLIC_SCHEME_HOST_AND_PORT
-              value: "http://localhost:$(WDQS_PORT)"
             - name: QUICKSTATEMENTS_HOST
               value: "quickstatements.$(NAMESPACE).svc.cluster.local"
-          {{- if .Values.queryservice.enabled }}
-            - name: WDQS_PORT
-              value: {{ (.Values.queryservice.service.port | default 9999) | quote }}
-          {{- end }}
+            - name: QS_PUBLIC_SCHEME_HOST_AND_PORT
+              value: "http://$(QUICKSTATEMENTS_HOST):80"
           {{- if .Values.wikibase.enabled }}
             - name: WIKIBASE_SCHEME_AND_HOST
               value: "http://wikibase.$(NAMESPACE).svc.cluster.local"

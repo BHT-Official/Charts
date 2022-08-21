@@ -16,9 +16,6 @@ wikibase:
   image:
     repository: wikibase/wikibase-bundle
     tag: 1.36.3-wmde.5
-  persistence:
-    enabled: true
-    size: 10Gi
   auth:
     admin:
       username: "admin"
@@ -121,7 +118,7 @@ quickstatements:
       hostPrefix: qs
 
 elasticsearch:
-  enabled: false
+  enabled: true
   service:
     port: 9200
   image:
