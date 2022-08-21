@@ -50,6 +50,10 @@ spec:
                 secretKeyRef:
                   name: wikibase-auth-secret
                   key: MW_WG_SECRET_KEY
+            - name: MW_WG_JOB_RUN_RATE
+              value: {{ .Values.wikibase.jobrunner.runRate | default 1 | quote }}
+            - name: WIKIBASE_HOST
+              value: "wikibase.$(NAMESPACE).svc.cluster.local"
           {{- if .Values.mariadb.enabled }}
             - name: DB_NAME
               valueFrom:
@@ -72,7 +76,7 @@ spec:
                   name: db-auth-secret
                   key: DB_PORT
             - name: DB_SERVER
-              value: "mariadb.$(NAMESPACE).svc.cluster.local:$(DB_PORT)"
+              value: "$(NAMESPACE)-mariadb.$(NAMESPACE).svc.cluster.local:$(DB_PORT)"
           {{- else }}
             {{- with .Values.wikibase.auth.externalDatabase }}
             - name: DB_NAME
@@ -91,10 +95,6 @@ spec:
             - name: MW_ELASTIC_PORT
               value: {{ .Values.elasticsearch.service.port | default 9200 | quote }}
           {{- end }}
-            - name: MW_WG_JOB_RUN_RATE
-              value: {{ .Values.wikibase.jobrunner.runRate | default 1 | quote }}
-            - name: WIKIBASE_HOST
-              value: "wikibase.$(NAMESPACE).svc.cluster.local"
           image: "{{ .Values.wikibase.jobrunner.image.repository }}:{{ .Values.wikibase.jobrunner.image.tag }}"
           volumeMounts:
             - name: wikibase-jobrunner-data

@@ -68,7 +68,7 @@ spec:
                   name: db-auth-secret
                   key: DB_PORT
             - name: DB_SERVER
-              value: "mariadb.$(NAMESPACE).svc.cluster.local:$(DB_PORT)"
+              value: "$(NAMESPACE)-mariadb.$(NAMESPACE).svc.cluster.local:$(DB_PORT)"
           {{- else }}
             {{- with .Values.wikibase.auth.externalDatabase }}
             - name: DB_NAME

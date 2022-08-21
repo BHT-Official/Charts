@@ -27,7 +27,7 @@ spec:
             - name: WDQS_HOST
               value: "queryservice.$(NAMESPACE).svc.cluster.local"
             - name: WDQS_PORT
-              value: {{ .Values.queryservice.port | quote }}
+              value: {{ .Values.queryservice.service.port | quote }}
             - name: PROXY_PASS_HOST
               value: "$(WDQS_HOST):$(WDQS_PORT)"
           image: "{{ .Values.queryservice.proxy.image.repository }}:{{ .Values.queryservice.proxy.image.tag }}"
