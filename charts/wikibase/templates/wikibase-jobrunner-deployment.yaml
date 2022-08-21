@@ -97,25 +97,25 @@ spec:
               value: "wikibase.$(NAMESPACE).svc.cluster.local"
           image: "{{ .Values.wikibase.jobrunner.image.repository }}:{{ .Values.wikibase.jobrunner.image.tag }}"
           volumeMounts:
+            - name: wikibase-jobrunner-data
+              mountPath: /
+              readOnly: true
           {{- if and .Values.global.shared.enabled .Values.global.shared.persistence.enabled }}
             - name: shared-data
               mountPath: /var/www/html
               readOnly: true
           {{- end }}
-          {{- if .Values.wikibase.jobrunner.persistence.enabled }}
-            - name: wikibase-jobrunner-data
-              mountPath: /jobrunner-entrypoint.sh
-          {{- end }}
       restartPolicy: Always
       volumes:
+        - name: wikibase-jobrunner-data
+          configMap:
+            name: wikibase-jobrunner-data
+            items:
+              - key: jobrunner-entrypoint.sh
+                path: jobrunner-entrypoint.sh
       {{- if and .Values.global.shared.enabled .Values.global.shared.persistence.enabled }}
         - name: shared-data
           persistentVolumeClaim:
             claimName: shared-data
-      {{- end }}
-      {{- if .Values.wikibase.jobrunner.persistence.enabled }}
-        - name: wikibase-jobrunner-data
-          persistentVolumeClaim:
-            claimName: wikibase-jobrunner-data
       {{- end }}
 {{- end }}
