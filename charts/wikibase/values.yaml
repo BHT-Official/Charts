@@ -3,7 +3,7 @@ global:
     enabled: true
     persistence:
       enabled: true
-      size: 20Gi
+      size: 10Gi
   ingressroute:
     enabled: true
     host: wikibase.example.com
@@ -18,7 +18,7 @@ wikibase:
     tag: 1.36.3-wmde.5
   persistence:
     enabled: true
-    size: 40Gi
+    size: 10Gi
   auth:
     admin:
       username: "admin"
@@ -40,7 +40,7 @@ wikibase:
     runRate: 4
     persistence:
       enabled: true
-      size: 10Gi
+      size: 250Mi
 
 mariadb:
   enabled: true # Set to false if want to use external database (also set wikibase.externalDatabase for connection info).
@@ -61,7 +61,7 @@ mariadb:
         mysql: 3306
     persistence:
       enabled: true
-      size: 20Gi
+      size: 10Gi
 
 queryservice:
   enabled: true
@@ -72,7 +72,7 @@ queryservice:
     tag: 0.3.97-wmde.5
   persistence:
     enabled: true
-    size: 40Gi
+    size: 10Gi
   ui:
     enabled: true
     service:
@@ -117,14 +117,14 @@ quickstatements:
       value: 'Property:'
   persistence:
     enabled: true
-    size: 40Gi
+    size: 10Gi
   expose:
     enabled: true
     route:
       hostPrefix: qs
 
 elasticsearch:
-  enabled: true
+  enabled: false
   service:
     port: 9200
   image:
