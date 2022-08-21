@@ -6,7 +6,7 @@ metadata:
   labels:
     {{- include "wikibase.labels" . | nindent 4 }}
   annotations:
-    volume.beta.kubernetes.io/storage-class: {{ (.Values.queryservice.persistence.storageClass | quote) | default "default" }}
+    volume.beta.kubernetes.io/storage-class: {{ .Values.queryservice.persistence.storageClass | default "default" | quote }}
 spec:
   accessModes:
     - ReadWriteOnce
@@ -17,7 +17,7 @@ spec:
     {{- if (eq "-" .Values.queryservice.persistence.storageClass) }}
       storageClassName: ""
     {{- else }}
-      storageClassName: {{ (.Values.queryservice.persistence.storageClass | quote) | default "default" }}
+      storageClassName: {{ .Values.queryservice.persistence.storageClass | default "default" | quote }}
     {{- end }}
   {{- end }}
 {{- end -}}
