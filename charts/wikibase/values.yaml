@@ -24,6 +24,11 @@ elasticsearch:
   volume:
     size: 10Gi
 
+queryservice:
+  enabled: true
+  volume:
+    size: 40Gi
+
 shared:
   enabled: true
   volume:
