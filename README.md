@@ -23,5 +23,5 @@ You can then run `helm search repo bht` to see the charts.
 This chart is based on [wmde/wikibase-release-pipeline](https://github.com/wmde/wikibase-release-pipeline)
 
 ```bash
-helm install --name wikibase wmde/wikibase-release-pipeline
+helm install wikibase bht/wikibase
 ```
