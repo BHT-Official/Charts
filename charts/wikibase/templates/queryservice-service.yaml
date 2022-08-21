@@ -9,7 +9,7 @@ spec:
   selector:
     app: queryservice
   ports:
-    - name: wdqs-http
+    - name: wdqs-api
       port: {{ .Values.queryservice.service.port | default 9999 }}
       targetPort: wdqs
 {{- end -}}
