@@ -11,3 +11,8 @@ sources:
   - https://github.com/wmde/wikibase-release-pipeline
   - https://github.com/BHT-Official/Charts
 home: https://wikiba.se
+dependencies:
+  - name: mariadb
+    version: 11.1.8
+    repository: https://charts.bitnami.com/bitnami
+    condition: db.enabled
