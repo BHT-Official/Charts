@@ -11,3 +11,11 @@ mariadb:
     username: "wikibase"
     password: "password"
     database: "wikibase"
+
+elasticsearch:
+  enabled: true
+  image:
+    repository: wikibase/elasticsearch
+    tag: 6.8.23-wmde.5
+  volume:
+    size: 10Gi
