@@ -9,7 +9,7 @@ spec:
   selector:
     app: elasticsearch
   ports:
-    - name: elastic-http
+    - name: elastic-api
       port: {{ .Values.elasticsearch.service.port | default 9200 }}
       targetPort: elastic
 {{- end -}}
