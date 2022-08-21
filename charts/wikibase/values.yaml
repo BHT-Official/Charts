@@ -11,6 +11,10 @@ mariadb:
     username: "wikibase"
     password: "password"
     database: "wikibase"
+  data:
+    persistence:
+      enabled: true
+      size: 20Gi
 
 elasticsearch:
   enabled: true
