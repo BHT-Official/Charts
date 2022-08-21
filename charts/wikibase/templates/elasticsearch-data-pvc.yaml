@@ -1,0 +1,17 @@
+{{- if and .Values.elasticsearch.enabled .Values.elasticsearch.persistence.enabled -}}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: elasticsearch-data
+  labels:
+    {{- include "wikibase.labels" . | nindent 4 }}
+  annotations:
+    volume.beta.kubernetes.io/storage-class: {{ .Values.elasticsearch.persistence.storageClass | default "default" | quote }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.elasticsearch.persistence.size | quote }}
+  storageClassName: {{ .Values.elasticsearch.persistence.storageClass | default "default" | quote }}
+{{- end -}}

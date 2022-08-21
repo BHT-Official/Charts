@@ -1,0 +1,17 @@
+{{- if and .Values.quickstatements.enabled .Values.quickstatements.persistence.enabled -}}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: quickstatements-data
+  labels:
+    {{- include "wikibase.labels" . | nindent 4 }}
+  annotations:
+    volume.beta.kubernetes.io/storage-class: {{ .Values.quickstatements.persistence.storageClass | default "default" | quote }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.quickstatements.persistence.size | quote }}
+  storageClassName: {{ .Values.quickstatements.persistence.storageClass | default "default" | quote }}
+{{- end -}}

@@ -13,3 +13,15 @@ helm repo update
 ```
 
 You can then run `helm search repo bht` to see the charts.
+
+## Charts
+
+* [wikibase](https://github.com/BHT-Official/Helm-Charts/tree/master/charts/wikibase)
+
+### Wikibase
+
+This chart is based on [wmde/wikibase-release-pipeline](https://github.com/wmde/wikibase-release-pipeline)
+
+```bash
+helm install --name wikibase wmde/wikibase-release-pipeline
+```

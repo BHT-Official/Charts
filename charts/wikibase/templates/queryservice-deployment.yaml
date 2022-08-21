@@ -1,0 +1,55 @@
+{{- if .Values.queryservice.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: queryservice
+  labels:
+    {{- include "wikibase.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: queryservice
+      {{- include "wikibase.labels" . | nindent 6 }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: queryservice
+        {{- include "wikibase.labels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: queryservice
+          args:
+            - /runBlazegraph.sh
+          env:
+            - name: NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: WDQS_HOST
+              value: "queryservice.$(NAMESPACE).svc.cluster.local"
+            - name: WDQS_PORT
+              value: {{ .Values.queryservice.service.port | default 9999 | quote }}
+          {{- if .Values.wikibase.enabled }}
+            - name: WIKIBASE_HOST
+              value: "wikibase.$(NAMESPACE).svc.cluster.local"
+          {{- end }}
+          image: "{{ .Values.queryservice.image.repository }}:{{ .Values.queryservice.image.tag }}"
+          ports:
+            - name: wdqs
+              containerPort: 9999
+        {{- if .Values.queryservice.persistence.enabled }}
+          volumeMounts:
+            - name: queryservice-data
+              mountPath: /wdqs/data
+        {{- end }}
+      restartPolicy: Always
+      volumes:
+      {{- if .Values.queryservice.persistence.enabled }}
+        - name: queryservice-data
+          persistentVolumeClaim:
+            claimName: queryservice-data
+      {{- end }}
+{{- end -}}

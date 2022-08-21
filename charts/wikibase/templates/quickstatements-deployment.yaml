@@ -1,0 +1,57 @@
+{{- if .Values.quickstatements.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: quickstatements
+  labels:
+    {{- include "wikibase.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      app: quickstatements
+      {{- include "wikibase.labels" . | nindent 6 }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: quickstatements
+        {{- include "wikibase.labels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: quickstatements
+          env:
+          {{- if .Values.quickstatements.env }}
+            {{- toYaml .Values.quickstatements.env | nindent 12 }}
+          {{- end }}
+            - name: NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: QUICKSTATEMENTS_HOST
+              value: "quickstatements.$(NAMESPACE).svc.cluster.local"
+            - name: QS_PUBLIC_SCHEME_HOST_AND_PORT
+              value: "http://$(QUICKSTATEMENTS_HOST):80"
+          {{- if .Values.wikibase.enabled }}
+            - name: WIKIBASE_SCHEME_AND_HOST
+              value: "http://wikibase.$(NAMESPACE).svc.cluster.local"
+            - name: WB_PUBLIC_SCHEME_HOST_AND_PORT
+              value: "http://$(WIKIBASE_SCHEME_AND_HOST):{{ .Values.wikibase.service.port | default 80 }}"
+          {{- end }}
+          image: "{{ .Values.quickstatements.image.repository }}:{{ .Values.quickstatements.image.tag }}"
+          ports:
+            - name: http
+              containerPort: 80
+        {{- if .Values.quickstatements.persistence.enabled }}
+          volumeMounts:
+            - mountPath: /quickstatements/data
+              name: quickstatements-data
+        {{- end }}
+      restartPolicy: Always
+      volumes:
+      {{- if .Values.quickstatements.persistence.enabled }}
+        - name: quickstatements-data
+          persistentVolumeClaim:
+            claimName: quickstatements-data
+      {{- end }}
+{{- end -}}

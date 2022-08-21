@@ -1,0 +1,17 @@
+{{- if and .Values.queryservice.enabled .Values.queryservice.persistence.enabled -}}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: queryservice-data
+  labels:
+    {{- include "wikibase.labels" . | nindent 4 }}
+  annotations:
+    volume.beta.kubernetes.io/storage-class: {{ .Values.queryservice.persistence.storageClass | default "default" | quote }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.queryservice.persistence.size | quote }}
+  storageClassName: {{ .Values.queryservice.persistence.storageClass | default "default" | quote }}
+{{- end -}}

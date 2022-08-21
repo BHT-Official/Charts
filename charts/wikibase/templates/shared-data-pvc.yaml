@@ -1,0 +1,17 @@
+{{- if and .Values.global.shared.enabled .Values.global.shared.persistence.enabled -}}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: shared-data
+  labels:
+    {{- include "wikibase.labels" . | nindent 4 }}
+  annotations:
+    volume.beta.kubernetes.io/storage-class: {{ .Values.global.shared.persistence.storageClass | default "default" | quote }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.global.shared.persistence.size | quote }}
+  storageClassName: {{ .Values.global.shared.persistence.storageClass | default "default" | quote }}
+{{- end -}}

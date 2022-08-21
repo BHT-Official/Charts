@@ -1,0 +1,15 @@
+{{- if .Values.queryservice.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: queryservice
+  labels:
+    {{- include "wikibase.labels" . | nindent 4 }}
+spec:
+  selector:
+    app: queryservice
+  ports:
+    - name: wdqs-api
+      port: {{ .Values.queryservice.service.port | default 9999 }}
+      targetPort: wdqs
+{{- end -}}

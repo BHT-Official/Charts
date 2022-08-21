@@ -1,0 +1,133 @@
+global:
+  shared:
+    enabled: true
+    persistence:
+      enabled: true
+      size: 10Gi
+  ingressroute:
+    enabled: true
+    host: wikibase.example.com
+    forceHttps: true
+
+wikibase:
+  enabled: true
+  service:
+    port: 80
+  image:
+    repository: wikibase/wikibase-bundle
+    tag: 1.36.3-wmde.5
+  auth:
+    admin:
+      username: "admin"
+      password: "p@ssw0rd-123"
+      email: "admin@example.com"
+    secret: "some-secret-gsdgfhndf@-YDK"
+    externalDatabase:
+      enabled: false # Set to true if want to use external database (also set mariadb.enabled to false).
+      # host: "wikibase-mariadb.example.com"
+      # port: 3306
+      # user: "wikibase"
+      # password: "password"
+      # database: "wikibase"
+  jobrunner:
+    enabled: true
+    image:
+      repository: wikibase/wikibase-bundle
+      tag: 1.36.3-wmde.5
+    runRate: 1
+
+mariadb:
+  enabled: true # Set to false if want to use external database (also set wikibase.externalDatabase for connection info).
+  global:
+    storageClass: "default"
+  image:
+    repository: bitnami/mariadb
+    tag: 10.6.9
+    pullPolicy: IfNotPresent
+  auth:
+    rootPassword: "" # Leave empty to auto-generate a random password.
+    username: "wikibase"
+    password: "password"
+    database: "wikibase"
+  primary:
+    service:
+      ports:
+        mysql: 3306
+    persistence:
+      enabled: true
+      size: 10Gi
+
+queryservice:
+  enabled: true
+  service:
+    port: 9999
+  image:
+    repository: wikibase/wdqs
+    tag: 0.3.97-wmde.5
+  persistence:
+    enabled: true
+    size: 10Gi
+  ui:
+    enabled: true
+    service:
+      port: 80
+    image:
+      repository: wikibase/wdqs-frontend
+      tag: wmde.5
+    expose:
+      enabled: true
+      route:
+        hostPrefix: query
+  updater:
+    enabled: true
+    image:
+      repository: wikibase/wdqs
+      tag: 0.3.97-wmde.5
+  proxy:
+    enabled: true
+    image:
+      repository: wikibase/wdqs-proxy
+      tag: wmde.5
+  expose:
+    enabled: false
+    route:
+      hostPrefix: api.query
+
+quickstatements:
+  enabled: true
+  service:
+    port: 8840
+  image:
+    repository: wikibase/quickstatements
+    tag: wmde.5
+  env:
+    - name: WB_ITEM_NAMESPACE
+      value: "120"
+    - name: WB_ITEM_PREFIX
+      value: "Item:"
+    - name: WB_PROPERTY_NAMESPACE
+      value: "122"
+    - name: WB_PROPERTY_PREFIX
+      value: "Property:"
+  persistence:
+    enabled: true
+    size: 10Gi
+  expose:
+    enabled: true
+    route:
+      hostPrefix: qs
+
+elasticsearch:
+  enabled: true
+  service:
+    port: 9200
+  image:
+    repository: wikibase/elasticsearch
+    tag: 6.8.23-wmde.5
+  persistence:
+    enabled: true
+    size: 10Gi
+  expose:
+    enabled: false
+    route:
+      hostPrefix: elasticsearch

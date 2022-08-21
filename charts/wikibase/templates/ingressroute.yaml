@@ -1,0 +1,86 @@
+{{- if .Values.global.ingressroute.enabled -}}
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: wikibase
+  labels:
+    {{- include "wikibase.labels" . | nindent 4 }}
+spec:
+  entryPoints:
+  {{- if not .Values.global.ingressroute.forceHttps }}
+    - web
+  {{- end }}
+    - websecure
+  routes:
+  {{- if .Values.wikibase.enabled }}
+    - kind: Rule
+      match: {{ print "Host(`" (.Values.global.ingressroute.host | default "wikibase.local") "`)" }}
+    {{- if not .Values.global.ingressroute.forceHttps }}
+      middlewares:
+        - name: https-redirectscheme
+    {{- end }}
+      services:
+        - kind: Service
+          name: wikibase
+          port: http
+  {{- end }}
+  {{- if and .Values.queryservice.enabled (and .Values.queryservice.ui.enabled .Values.queryservice.ui.expose.enabled) }}
+    - kind: Rule
+      match: {{ print "Host(`" (.Values.queryservice.ui.expose.route.hostPrefix | default "query") "." (.Values.global.ingressroute.host | default "wikibase.local") "`)" }}
+    {{- if not .Values.global.ingressroute.forceHttps }}
+      middlewares:
+        - name: https-redirectscheme
+    {{- end }}
+      services:
+        - kind: Service
+          name: queryservice-ui
+          port: wdqs-web
+  {{- end }}
+  {{- if and .Values.queryservice.enabled .Values.queryservice.expose.enabled }}
+    - kind: Rule
+      match: {{ print "Host(`" (.Values.queryservice.expose.route.hostPrefix | default "api.query") "." (.Values.global.ingressroute.host | default "wikibase.local") "`)" }}
+    {{- if not .Values.global.ingressroute.forceHttps }}
+      middlewares:
+        - name: https-redirectscheme
+    {{- end }}
+      services:
+        - kind: Service
+          name: queryservice
+          port: wdqs-api
+  {{- end }}
+  {{- if and .Values.quickstatements.enabled .Values.quickstatements.expose.enabled }}
+    - kind: Rule
+      match: {{ print "Host(`" (.Values.quickstatements.expose.route.hostPrefix | default "qs") "." (.Values.global.ingressroute.host | default "wikibase.local") "`)" }}
+    {{- if not .Values.global.ingressroute.forceHttps }}
+      middlewares:
+        - name: https-redirectscheme
+    {{- end }}
+      services:
+        - kind: Service
+          name: quickstatements
+          port: quickstatements
+  {{- end }}
+  {{- if and .Values.elasticsearch.enabled .Values.elasticsearch.expose.enabled }}
+    - kind: Rule
+      match: {{ print "Host(`" (.Values.elasticsearch.expose.route.hostPrefix | default "elasticsearch") "." (.Values.global.ingressroute.host | default "wikibase.local") "`)" }}
+    {{- if not .Values.global.ingressroute.forceHttps }}
+      middlewares:
+        - name: https-redirectscheme
+    {{- end }}
+      services:
+        - kind: Service
+          name: elasticsearch
+          port: elasticsearch
+  {{- end }}
+{{- if not .Values.global.ingressroute.forceHttps }}
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: https-redirectscheme
+spec:
+  redirectScheme:
+    scheme: https
+    permanent: true
+{{- end }}
+{{- end -}}
