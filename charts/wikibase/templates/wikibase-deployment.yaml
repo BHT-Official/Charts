@@ -52,6 +52,11 @@ spec:
                 secretKeyRef:
                   name: db-auth-secret
                   key: DB_NAME
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: db-auth-secret
+                  key: DB_USER
             - name: DB_PASS
               valueFrom:
                 secretKeyRef:
@@ -68,6 +73,8 @@ spec:
             {{- with .Values.wikibase.auth.externalDatabase }}
             - name: DB_NAME
               value: {{ .database | quote }}
+            - name: DB_USER
+              value: {{ .user | quote }}
             - name: DB_PASS
               value: {{ .password | quote }}
             - name: DB_SERVER
