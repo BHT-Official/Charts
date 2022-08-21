@@ -15,7 +15,7 @@ wikibase:
     port: 80
   image:
     repository: wikibase/wikibase-bundle
-    tag: 1.36.3-wmde.6
+    tag: 1.36.3-wmde.5
   persistence:
     enabled: true
     size: 40Gi
@@ -36,7 +36,7 @@ wikibase:
     enabled: true
     image:
       repository: wikibase/wikibase-bundle
-      tag: 1.36.3-wmde.6
+      tag: 1.36.3-wmde.5
     runRate: 1
     persistence:
       enabled: true
@@ -69,7 +69,7 @@ queryservice:
     port: 9999
   image:
     repository: wikibase/wdqs
-    tag: 0.3.97-wmde.6
+    tag: 0.3.97-wmde.5
   persistence:
     enabled: true
     size: 40Gi
@@ -79,7 +79,7 @@ queryservice:
       port: 80
     image:
       repository: wikibase/wdqs-frontend
-      tag: wmde.6
+      tag: wmde.5
     expose:
       enabled: true
       route:
@@ -88,12 +88,12 @@ queryservice:
     enabled: true
     image:
       repository: wikibase/wdqs
-      tag: 0.3.97-wmde.6
+      tag: 0.3.97-wmde.5
   proxy:
     enabled: true
     image:
       repository: wikibase/wdqs-proxy
-      tag: wmde.6
+      tag: wmde.5
   expose:
     enabled: false
     route:
@@ -105,7 +105,7 @@ quickstatements:
     port: 8840
   image:
     repository: wikibase/quickstatements
-    tag: wmde.6
+    tag: wmde.5
   env:
     - name: WB_ITEM_NAMESPACE
       value: "120"
@@ -129,7 +129,7 @@ elasticsearch:
     port: 9200
   image:
     repository: wikibase/elasticsearch
-    tag: 6.8.23-wmde.6
+    tag: 6.8.23-wmde.5
   persistence:
     enabled: true
     size: 10Gi
