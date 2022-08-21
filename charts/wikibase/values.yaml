@@ -4,6 +4,10 @@ global:
     persistence:
       enabled: true
       size: 20Gi
+  ingressroute:
+    enabled: true
+    host: wikibase.example.com
+    forceHttps: true
 
 wikibase:
   enabled: true
@@ -76,6 +80,10 @@ queryservice:
     image:
       repository: wikibase/wdqs-frontend
       tag: wmde.6
+    expose:
+      enabled: true
+      route:
+        hostPrefix: query
   updater:
     enabled: true
     image:
@@ -86,6 +94,10 @@ queryservice:
     image:
       repository: wikibase/wdqs-proxy
       tag: wmde.6
+  expose:
+    enabled: false
+    route:
+      hostPrefix: api.query
 
 quickstatements:
   enabled: true
@@ -106,6 +118,10 @@ quickstatements:
   persistence:
     enabled: true
     size: 40Gi
+  expose:
+    enabled: true
+    route:
+      hostPrefix: qs
 
 elasticsearch:
   enabled: true
@@ -117,3 +133,7 @@ elasticsearch:
   persistence:
     enabled: true
     size: 10Gi
+  expose:
+    enabled: false
+    route:
+      hostPrefix: elasticsearch
