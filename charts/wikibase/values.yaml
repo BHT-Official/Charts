@@ -39,5 +39,18 @@ queryservice:
 
 quickstatements:
   enabled: true
+  port: 8840
+  image:
+    repository: wikibase/quickstatements
+    tag: wmde.5
+  env:
+    - name: WB_ITEM_NAMESPACE
+      value: "120"
+    - name: WB_ITEM_PREFIX
+      value: 'Item:'
+    - name: WB_PROPERTY_NAMESPACE
+      value: "122"
+    - name: WB_PROPERTY_PREFIX
+      value: 'Property:'
   volume:
     size: 40Gi
