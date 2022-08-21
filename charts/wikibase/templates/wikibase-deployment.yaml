@@ -104,7 +104,7 @@ spec:
               readOnly: true
           {{- if and .Values.global.shared.enabled .Values.global.shared.persistence.enabled }}
             - name: shared-data
-              mountPath: /var/www/html
+              mountPath: /var/shared-localsettings
           {{- end }}
           {{- if and .Values.quickstatements.enabled .Values.quickstatements.persistence.enabled }}
             - name: quickstatements-data
