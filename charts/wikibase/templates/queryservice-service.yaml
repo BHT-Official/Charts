@@ -7,9 +7,7 @@ metadata:
     {{- include "wikibase.labels" . | nindent 4 }}
 spec:
   selector:
-    matchLabels:
-      app: queryservice-ui
-      {{- include "wikibase.labels" . | nindent 6 }}
+    app: queryservice
   ports:
     - name: wdqs-http
       port: {{ .Values.queryservice.service.port | default 9999 }}

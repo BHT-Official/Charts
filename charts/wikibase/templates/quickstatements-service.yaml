@@ -7,9 +7,7 @@ metadata:
     {{- include "wikibase.labels" . | nindent 4 }}
 spec:
   selector:
-    matchLabels:
-      app: quickstatements
-      {{- include "wikibase.labels" . | nindent 6 }}
+    app: quickstatements
   ports:
     - name: quickstatements
       port: {{ .Values.quickstatements.service.port }}

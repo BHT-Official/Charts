@@ -7,9 +7,7 @@ metadata:
     {{- include "wikibase.labels" . | nindent 4 }}
 spec:
   selector:
-    matchLabels:
-      app: wikibase
-      {{- include "wikibase.labels" . | nindent 6 }}
+    app: wikibase
   ports:
     - name: http
       port: {{ .Values.wikibase.service.port }}
