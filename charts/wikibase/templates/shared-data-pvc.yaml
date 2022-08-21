@@ -1,6 +1,5 @@
-{{- if .Values.global.shared.enabled -}}
+{{- if and .Values.global.shared.enabled .Values.global.shared.persistence.enabled -}}
 {{- with .Values.global.shared }}
-{{- if .persistence.enabled }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -26,6 +25,5 @@ spec:
       storageClassName: {{ .persistence.storageClass | quote }}
     {{- end }}
     {{- end }}
-{{- end }}
 {{- end }}
 {{- end -}}
