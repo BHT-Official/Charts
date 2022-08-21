@@ -13,11 +13,9 @@ spec:
   resources:
     requests:
       storage: {{ .Values.global.shared.persistence.size | quote }}
-  {{- if .Values.global.shared.persistence.storageClass }}
-    {{- if (eq "-" .Values.global.shared.persistence.storageClass) }}
-      storageClassName: ""
-    {{- else }}
-      storageClassName: {{ .Values.global.shared.persistence.storageClass | default "default" | quote }}
-    {{- end }}
-  {{- end }}
+{{- if (eq "-" .Values.global.shared.persistence.storageClass) }}
+  storageClassName: ""
+{{- else }}
+  storageClassName: {{ .Values.global.shared.persistence.storageClass | default "default" | quote }}
+{{- end }}
 {{- end -}}

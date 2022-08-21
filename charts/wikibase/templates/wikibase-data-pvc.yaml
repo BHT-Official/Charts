@@ -13,11 +13,9 @@ spec:
   resources:
     requests:
       storage: {{ .Values.wikibase.persistence.size | quote }}
-  {{- if .Values.wikibase.persistence.storageClass }}
-    {{- if (eq "-" .Values.wikibase.persistence.storageClass) }}
-      storageClassName: ""
-    {{- else }}
-      storageClassName: {{ .Values.wikibase.persistence.storageClass | default "default" | quote }}
-    {{- end }}
-  {{- end }}
+{{- if (eq "-" .Values.wikibase.persistence.storageClass) }}
+  storageClassName: ""
+{{- else }}
+  storageClassName: {{ .Values.wikibase.persistence.storageClass | default "default" | quote }}
+{{- end }}
 {{- end -}}

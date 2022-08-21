@@ -13,11 +13,9 @@ spec:
   resources:
     requests:
       storage: {{ .Values.wikibase.jobrunner.persistence.size | quote }}
-  {{- if .Values.wikibase.jobrunner.persistence.storageClass }}
-    {{- if (eq "-" .Values.wikibase.jobrunner.persistence.storageClass) }}
-      storageClassName: ""
-    {{- else }}
-      storageClassName: {{ .Values.wikibase.jobrunner.persistence.storageClass | default "default" | quote }}
-    {{- end }}
-  {{- end }}
+{{- if (eq "-" .Values.wikibase.jobrunner.persistence.storageClass) }}
+  storageClassName: ""
+{{- else }}
+  storageClassName: {{ .Values.wikibase.jobrunner.persistence.storageClass | default "default" | quote }}
+{{- end }}
 {{- end -}}
