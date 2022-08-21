@@ -37,3 +37,7 @@ queryservice:
   volume:
     size: 40Gi
 
+quickstatements:
+  enabled: true
+  volume:
+    size: 40Gi
