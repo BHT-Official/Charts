@@ -6,12 +6,12 @@ metadata:
   labels:
     {{- include "wikibase.labels" . | nindent 4 }}
 spec:
-  ports:
-    - name: quickstatements
-      port: {{ .Values.quickstatements.service.port }}
-      targetPort: 80
   selector:
     matchLabels:
       app: quickstatements
       {{- include "wikibase.labels" . | nindent 6 }}
+  ports:
+    - name: quickstatements
+      port: {{ .Values.quickstatements.service.port }}
+      targetPort: http
 {{- end -}}
