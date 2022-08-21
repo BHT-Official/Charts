@@ -13,9 +13,5 @@ spec:
   resources:
     requests:
       storage: {{ .Values.elasticsearch.persistence.size | quote }}
-{{- if (eq "-" .Values.elasticsearch.persistence.storageClass) }}
-  storageClassName: ""
-{{- else }}
   storageClassName: {{ .Values.elasticsearch.persistence.storageClass | default "default" | quote }}
-{{- end }}
 {{- end -}}

@@ -13,9 +13,5 @@ spec:
   resources:
     requests:
       storage: {{ .Values.wikibase.jobrunner.persistence.size | quote }}
-{{- if (eq "-" .Values.wikibase.jobrunner.persistence.storageClass) }}
-  storageClassName: ""
-{{- else }}
   storageClassName: {{ .Values.wikibase.jobrunner.persistence.storageClass | default "default" | quote }}
-{{- end }}
 {{- end -}}
