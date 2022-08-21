@@ -19,3 +19,8 @@ elasticsearch:
     tag: 6.8.23-wmde.5
   volume:
     size: 10Gi
+
+shared:
+  enabled: true
+  volume:
+    size: 20Gi
