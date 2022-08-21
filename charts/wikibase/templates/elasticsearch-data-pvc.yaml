@@ -1,4 +1,4 @@
-{{- if .Values.elasticsearch.enabled -}}
+{{- if and .Values.elasticsearch.enabled .Values.elasticsearch.persistence.enabled -}}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -6,22 +6,18 @@ metadata:
   labels:
     {{- include "wikibase.labels" . | nindent 4 }}
   annotations:
-  {{- if .Values.elasticsearch.persistence.storageClass }}
-    volume.beta.kubernetes.io/storage-class: {{ .Values.elasticsearch.storageClass | quote }}
-  {{- else }}
-    volume.beta.kubernetes.io/storage-class: "default"
-  {{- end }}
+  volume.beta.kubernetes.io/storage-class: {{ (.Values.elasticsearch.persistence.storageClass | quote) | default "default" }}
 spec:
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: {{ .Values.elasticsearch.volume.size | quote }}
+      storage: {{ .Values.elasticsearch.persistence.size | quote }}
     {{- if .Values.elasticsearch.persistence.storageClass }}
     {{- if (eq "-" .Values.elasticsearch.persistence.storageClass) }}
       storageClassName: ""
     {{- else }}
-      storageClassName: {{ .Values.elasticsearch.persistence.storageClass | quote }}
+      storageClassName: {{ (.Values.elasticsearch.persistence.storageClass | quote) | default "default" }}
     {{- end }}
     {{- end }}
 {{- end -}}

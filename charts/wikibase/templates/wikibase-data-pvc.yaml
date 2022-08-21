@@ -1,4 +1,4 @@
-{{- if .Values.wikibase.enabled -}}
+{{- if and .Values.wikibase.enabled .Values.wikibase.persistence.enabled -}}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -6,22 +6,18 @@ metadata:
   labels:
     {{- include "wikibase.labels" . | nindent 4 }}
   annotations:
-  {{- if .Values.wikibase.persistence.storageClass }}
-    volume.beta.kubernetes.io/storage-class: {{ .Values.wikibase.storageClass | quote }}
-  {{- else }}
-    volume.beta.kubernetes.io/storage-class: "default"
-  {{- end }}
+  volume.beta.kubernetes.io/storage-class: {{ (.Values.wikibase.persistence.storageClass | quote) | default "default" }}
 spec:
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: {{ .Values.wikibase.volume.size | quote }}
+      storage: {{ .Values.wikibase.persistence.size | quote }}
     {{- if .Values.wikibase.persistence.storageClass }}
     {{- if (eq "-" .Values.wikibase.persistence.storageClass) }}
       storageClassName: ""
     {{- else }}
-      storageClassName: {{ .Values.wikibase.persistence.storageClass | quote }}
+      storageClassName: {{ (.Values.wikibase.persistence.storageClass | quote) | default "default" }}
     {{- end }}
     {{- end }}
 {{- end -}}
