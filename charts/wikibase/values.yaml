@@ -1,3 +1,11 @@
+global:
+  shared:
+    enabled: true
+    persistence:
+      enabled: true
+      volume:
+        size: 20Gi
+
 mariadb:
   enabled: true
   global:
@@ -29,7 +37,3 @@ queryservice:
   volume:
     size: 40Gi
 
-shared:
-  enabled: true
-  volume:
-    size: 20Gi

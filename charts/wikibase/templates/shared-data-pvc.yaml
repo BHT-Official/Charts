@@ -1,4 +1,6 @@
-{{- if .Values.shared.enabled -}}
+{{- if .Values.global.shared.enabled -}}
+{{- with .Values.global.shared }}
+{{- if .persistence.enabled }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -6,8 +8,8 @@ metadata:
   labels:
     {{- include "wikibase.labels" . | nindent 4 }}
   annotations:
-  {{- if .Values.shared.persistence.storageClass }}
-    volume.beta.kubernetes.io/storage-class: {{ .Values.shared.storageClass | quote }}
+  {{- if .persistence.storageClass }}
+    volume.beta.kubernetes.io/storage-class: {{ .persistence.storageClass | quote }}
   {{- else }}
     volume.beta.kubernetes.io/storage-class: "default"
   {{- end }}
@@ -16,12 +18,14 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: {{ .Values.shared.volume.size | quote }}
-    {{- if .Values.shared.persistence.storageClass }}
-    {{- if (eq "-" .Values.shared.persistence.storageClass) }}
+      storage: {{ .volume.size | quote }}
+    {{- if .persistence.storageClass }}
+    {{- if (eq "-" .persistence.storageClass) }}
       storageClassName: ""
     {{- else }}
-      storageClassName: {{ .Values.shared.persistence.storageClass | quote }}
+      storageClassName: {{ .persistence.storageClass | quote }}
     {{- end }}
     {{- end }}
+{{- end }}
+{{- end }}
 {{- end -}}
