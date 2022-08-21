@@ -34,6 +34,21 @@ elasticsearch:
 
 queryservice:
   enabled: true
+  port: 9999
+  image:
+    repository: wikibase/wdqs
+    tag: 0.3.97-wmde.5
+  ui:
+    enabled: true
+    image:
+      repository: wikibase/wdqs-frontend
+      tag: wmde.5
+    port: 80
+  updater:
+    enabled: true
+    image:
+      repository: wikibase/wdqs
+      tag: 0.3.97-wmde.5
   volume:
     size: 40Gi
 
