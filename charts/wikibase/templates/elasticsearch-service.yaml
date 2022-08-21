@@ -1,0 +1,17 @@
+{{- if and .Values.elasticsearch.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: elasticsearch
+  labels:
+    {{- include "wikibase.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      app: elasticsearch
+      {{- include "wikibase.labels" . | nindent 6 }}
+  ports:
+    - name: elastic-http
+      port: {{ .Values.elasticsearch.service.port | default 9200 }}
+      targetPort: elastic
+{{- end -}}
