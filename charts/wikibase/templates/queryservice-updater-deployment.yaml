@@ -10,7 +10,6 @@ spec:
     matchLabels:
       app: queryservice-updater
       {{- include "wikibase.labels" . | nindent 6 }}
-  strategy: {}
   template:
     metadata:
       labels:
