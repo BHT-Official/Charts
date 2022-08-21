@@ -1,0 +1,13 @@
+mariadb:
+  enabled: true
+  global:
+    storageClass: "default"
+  image:
+    repository: bitnami/mariadb
+    tag: 10.6.9
+    pullPolicy: IfNotPresent
+  auth:
+    rootPassword: ""
+    username: "wikibase"
+    password: "password"
+    database: "wikibase"
