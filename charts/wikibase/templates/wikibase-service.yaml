@@ -1,0 +1,17 @@
+{{- if and .Values.wikibase.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: wikibase
+  labels:
+    {{- include "wikibase.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      app: wikibase
+      {{- include "wikibase.labels" . | nindent 6 }}
+  ports:
+    - name: http
+      port: {{ .Values.wikibase.service.port }}
+      targetPort: http
+{{- end -}}

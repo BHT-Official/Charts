@@ -1,0 +1,23 @@
+{{- if and (and .Values.wikibase.enabled .Values.wikibase.jobrunner.enabled) .Values.wikibase.jobrunner.persistence.enabled -}}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: wikibase-jobrunner-data
+  labels:
+    {{- include "wikibase.labels" . | nindent 4 }}
+  annotations:
+  volume.beta.kubernetes.io/storage-class: {{ (.Values.wikibase.jobrunner.persistence.storageClass | quote) | default "default" }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.wikibase.jobrunner.persistence.size | quote }}
+  {{- if .Values.wikibase.jobrunner.persistence.storageClass }}
+    {{- if (eq "-" .Values.wikibase.jobrunner.persistence.storageClass) }}
+      storageClassName: ""
+    {{- else }}
+      storageClassName: {{ (.Values.wikibase.jobrunner.persistence.storageClass | quote) | default "default" }}
+    {{- end }}
+  {{- end }}
+{{- end -}}
