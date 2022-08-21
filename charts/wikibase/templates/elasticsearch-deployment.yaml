@@ -41,5 +41,5 @@ spec:
         - name: elasticsearch-data
           persistentVolumeClaim:
             claimName: elasticsearch-data
-      {{- else }}
+      {{- end }}
 {{- end -}}

@@ -14,5 +14,4 @@ spec:
     - name: wdqs-http
       port: {{ .Values.queryservice.service.port | default 9999 }}
       targetPort: wdqs
-status:
-  loadBalancer: {}
+{{- end -}}

@@ -72,6 +72,7 @@ spec:
               value: {{ .password | quote }}
             - name: DB_SERVER
               value: "{{ .host }}:{{ .port }}"
+            {{- end }}
           {{- end }}
             - name: MW_WG_JOB_RUN_RATE
             {{- if .Values.wikibase.jobrunner.enabled }}
