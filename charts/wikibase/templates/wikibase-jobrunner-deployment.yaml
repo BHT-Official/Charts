@@ -22,7 +22,7 @@ spec:
       containers:
         - name: wikibase-jobrunner
           args:
-            - /jobrunner-entrypoint.sh
+            - /app/jobrunner-entrypoint.sh
           command:
             - /bin/bash
           env:
@@ -98,7 +98,7 @@ spec:
           image: "{{ .Values.wikibase.jobrunner.image.repository }}:{{ .Values.wikibase.jobrunner.image.tag }}"
           volumeMounts:
             - name: wikibase-jobrunner-data
-              mountPath: /
+              mountPath: /app
               readOnly: true
           {{- if and .Values.global.shared.enabled .Values.global.shared.persistence.enabled }}
             - name: shared-data
