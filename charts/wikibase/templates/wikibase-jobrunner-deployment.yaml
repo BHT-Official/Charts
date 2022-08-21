@@ -80,7 +80,7 @@ spec:
           image: "{{ .Values.wikibase.jobrunner.image.repository }}:{{ .Values.wikibase.jobrunner.image.tag }}"
           volumeMounts:
           {{- if and .Values.global.shared.enabled .Values.global.shared.persistence.enabled }}
-            - name: shared
+            - name: shared-data
               mountPath: /var/www/html
               readOnly: true
           {{- end }}
@@ -91,9 +91,9 @@ spec:
       restartPolicy: Always
       volumes:
       {{- if and .Values.global.shared.enabled .Values.global.shared.persistence.enabled }}
-        - name: shared
+        - name: shared-data
           persistentVolumeClaim:
-            claimName: shared
+            claimName: shared-data
       {{- end }}
       {{- if .Values.wikibase.jobrunner.persistence.enabled }}
         - name: wikibase-jobrunner-data

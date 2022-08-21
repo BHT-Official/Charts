@@ -102,7 +102,7 @@ spec:
               containerPort: 80
           volumeMounts:
           {{- if and .Values.global.shared.enabled .Values.global.shared.persistence.enabled }}
-            - name: shared
+            - name: shared-data
               mountPath: /var/www/html
           {{- end }}
           {{- if and .Values.quickstatements.enabled .Values.quickstatements.persistence.enabled }}
@@ -116,9 +116,9 @@ spec:
       restartPolicy: Always
       volumes:
       {{- if and .Values.global.shared.enabled .Values.global.shared.persistence.enabled }}
-        - name: shared
+        - name: shared-data
           persistentVolumeClaim:
-            claimName: shared
+            claimName: shared-data
       {{- end }}
       {{- if and .Values.quickstatements.enabled .Values.quickstatements.persistence.enabled }}
         - name: quickstatements-data
