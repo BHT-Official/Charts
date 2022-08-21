@@ -1,0 +1,38 @@
+{{- if .Values.elasticsearch.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: elasticsearch
+  labels:
+    {{- include "wikibase.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: elasticsearch
+      {{- include "wikibase.labels" . | nindent 6 }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: elasticsearch
+        {{- include "wikibase.labels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: elasticsearch
+          env:
+            - name: ES_JAVA_OPTS
+              value: -Xms512m -Xmx2048m -Dlog4j2.formatMsgNoLookups=true
+            - name: discovery.type
+              value: single-node
+          image: "{{ .Values.elasticsearch.image.repository }}:{{ .Values.elasticsearch.image.tag }}"
+          volumeMounts:
+            - mountPath: /usr/share/elasticsearch/data
+              name: elasticsearch-data
+      restartPolicy: Always
+      volumes:
+        - name: elasticsearch-data
+          persistentVolumeClaim:
+            claimName: elasticsearch-data
+{{- end -}}
