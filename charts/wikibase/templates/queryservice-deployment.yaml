@@ -24,22 +24,32 @@ spec:
           args:
             - /runBlazegraph.sh
           env:
+            - name: NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
             - name: WDQS_HOST
               value: "queryservice.$(NAMESPACE).svc.cluster.local"
             - name: WDQS_PORT
               value: {{ .Values.queryservice.port | quote }}
+          {{- if .Values.wikibase.enabled }}
             - name: WIKIBASE_HOST
               value: "wikibase.$(NAMESPACE).svc.cluster.local"
+          {{- end }}
           image: "{{ .Values.queryservice.image.repository }}:{{ .Values.queryservice.image.tag }}"
           ports:
             - name: wdqs
               containerPort: 9999
+        {{- if .Values.queryservice.persistence.enabled }}
           volumeMounts:
-            - mountPath: /wdqs/data
-              name: queryservice-data
+            - name: queryservice-data
+              mountPath: /wdqs/data
+        {{- end }}
       restartPolicy: Always
       volumes:
+      {{- if .Values.queryservice.persistence.enabled }}
         - name: queryservice-data
           persistentVolumeClaim:
             claimName: queryservice-data
+      {{- end }}
 {{- end -}}

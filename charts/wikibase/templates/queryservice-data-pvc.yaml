@@ -13,11 +13,11 @@ spec:
   resources:
     requests:
       storage: {{ .Values.queryservice.persistence.size | quote }}
-    {{- if .Values.queryservice.persistence.storageClass }}
+  {{- if .Values.queryservice.persistence.storageClass }}
     {{- if (eq "-" .Values.queryservice.persistence.storageClass) }}
       storageClassName: ""
     {{- else }}
       storageClassName: {{ (.Values.queryservice.persistence.storageClass | quote) | default "default" }}
     {{- end }}
-    {{- end }}
+  {{- end }}
 {{- end -}}

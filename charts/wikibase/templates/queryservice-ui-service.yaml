@@ -11,7 +11,7 @@ spec:
       app: queryservice-ui
       {{- include "wikibase.labels" . | nindent 6 }}
   ports:
-    - name: http
-      port: {{ .Values.queryservice.ui.port }}
+    - name: wdqs-web
+      port: {{ .Values.queryservice.ui.service.port | default 80 }}
       targetPort: http
 {{- end -}}

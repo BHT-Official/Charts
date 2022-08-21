@@ -27,12 +27,19 @@ spec:
             - name: discovery.type
               value: single-node
           image: "{{ .Values.elasticsearch.image.repository }}:{{ .Values.elasticsearch.image.tag }}"
+          ports:
+            - name: elastic
+              containerPort: 9200
+        {{- if .Values.elasticsearch.persistence.enabled }}
           volumeMounts:
-            - mountPath: /usr/share/elasticsearch/data
-              name: elasticsearch-data
+            - name: elasticsearch-data
+              mountPath: /usr/share/elasticsearch/data
+        {{- end }}
       restartPolicy: Always
       volumes:
+      {{- if .Values.elasticsearch.persistence.enabled }}
         - name: elasticsearch-data
           persistentVolumeClaim:
             claimName: elasticsearch-data
+      {{- else }}
 {{- end -}}

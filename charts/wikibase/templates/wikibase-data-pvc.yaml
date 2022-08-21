@@ -13,11 +13,11 @@ spec:
   resources:
     requests:
       storage: {{ .Values.wikibase.persistence.size | quote }}
-    {{- if .Values.wikibase.persistence.storageClass }}
+  {{- if .Values.wikibase.persistence.storageClass }}
     {{- if (eq "-" .Values.wikibase.persistence.storageClass) }}
       storageClassName: ""
     {{- else }}
       storageClassName: {{ (.Values.wikibase.persistence.storageClass | quote) | default "default" }}
     {{- end }}
-    {{- end }}
+  {{- end }}
 {{- end -}}

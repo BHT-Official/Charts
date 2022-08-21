@@ -6,7 +6,6 @@ metadata:
   labels:
     {{- include "wikibase.labels" . | nindent 4 }}
 spec:
-  replicas: 1
   selector:
     matchLabels:
       app: queryservice-updater
@@ -23,12 +22,18 @@ spec:
           args:
             - /runUpdate.sh
           env:
+            - name: NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
             - name: WDQS_HOST
               value: "queryservice.$(NAMESPACE).svc.cluster.local"
             - name: WDQS_PORT
-              value: {{ .Values.queryservice.port | quote }}
+              value: {{ (.Values.queryservice.service.port | default 9999) | quote }}
+          {{- if .Values.wikibase.enabled }}
             - name: WIKIBASE_HOST
               value: "wikibase.$(NAMESPACE).svc.cluster.local"
+          {{- end }}
           image: "{{ .Values.queryservice.updater.image.repository }}:{{ .Values.queryservice.updater.image.tag }}"
       restartPolicy: Always
 {{- end -}}

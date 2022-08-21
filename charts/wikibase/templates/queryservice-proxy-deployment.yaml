@@ -1,35 +1,35 @@
+{{- if and .Values.queryservice.enabled .Values.queryservice.proxy.enabled -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    kompose.cmd: kompose convert -c -f ./docker-compose.resolved.yml
-    kompose.version: 1.26.1 (HEAD)
-  creationTimestamp: null
+  name: queryservice-proxy
   labels:
-    io.kompose.service: wdqs-proxy
-  name: wdqs-proxy
+    {{- include "wikibase.labels" . | nindent 4 }}
 spec:
   replicas: 1
   selector:
-    matchLabels:
-      io.kompose.service: wdqs-proxy
-  strategy: {}
+   matchLabels:
+      app: queryservice-proxy
+      {{- include "wikibase.labels" . | nindent 6 }}
   template:
     metadata:
-      annotations:
-        kompose.cmd: kompose convert -c -f ./docker-compose.resolved.yml
-        kompose.version: 1.26.1 (HEAD)
-      creationTimestamp: null
       labels:
-        io.kompose.network/default: "true"
-        io.kompose.service: wdqs-proxy
+        app: queryservice-proxy
+        {{- include "wikibase.labels" . | nindent 8 }}
     spec:
       containers:
-        - env:
+        - name: queryservice-proxy
+          env:
+            - name: NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: WDQS_HOST
+              value: "queryservice.$(NAMESPACE).svc.cluster.local"
+            - name: WDQS_PORT
+              value: {{ .Values.queryservice.port | quote }}
             - name: PROXY_PASS_HOST
-              value: wdqs.svc:9999
-          image: wikibase/wdqs-proxy:wmde.5
-          name: wdqs-proxy
-          resources: {}
+              value: "$(WDQS_HOST):$(WDQS_PORT)"
+          image: "{{ .Values.queryservice.proxy.image.repository }}:{{ .Values.queryservice.proxy.image.tag }}"
       restartPolicy: Always
-status: {}
+{{- end -}}

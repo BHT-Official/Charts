@@ -13,11 +13,11 @@ spec:
   resources:
     requests:
       storage: {{ .Values.shared.persistence.size | quote }}
-    {{- if .Values.shared.persistence.storageClass }}
+  {{- if .Values.shared.persistence.storageClass }}
     {{- if (eq "-" .Values.shared.persistence.storageClass) }}
       storageClassName: ""
     {{- else }}
       storageClassName: {{ (.Values.shared.persistence.storageClass | quote) | default "default" }}
     {{- end }}
-    {{- end }}
+  {{- end }}
 {{- end -}}

@@ -13,11 +13,11 @@ spec:
   resources:
     requests:
       storage: {{ .Values.elasticsearch.persistence.size | quote }}
-    {{- if .Values.elasticsearch.persistence.storageClass }}
+  {{- if .Values.elasticsearch.persistence.storageClass }}
     {{- if (eq "-" .Values.elasticsearch.persistence.storageClass) }}
       storageClassName: ""
     {{- else }}
       storageClassName: {{ (.Values.elasticsearch.persistence.storageClass | quote) | default "default" }}
     {{- end }}
-    {{- end }}
+  {{- end }}
 {{- end -}}
