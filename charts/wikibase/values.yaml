@@ -1,9 +1,4 @@
 global:
-  shared:
-    enabled: true
-    persistence:
-      enabled: true
-      size: 10Gi
   ingressroute:
     enabled: true
     host: wikibase.example.com
