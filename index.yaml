@@ -1,3 +1,26 @@
 apiVersion: v1
-entries: {}
-generated: "2022-08-26T00:01:59.561747+08:00"
+entries:
+  wikibase:
+  - apiVersion: v2
+    created: "2022-08-25T16:03:51.607892823Z"
+    dependencies:
+    - condition: mariadb.enabled
+      name: mariadb
+      repository: https://charts.bitnami.com/bitnami
+      version: 11.1.8
+    description: An un-official ported Wikibase Helm Chart
+    digest: 6636848295dace7b8afffbe7599864ffd4f6b61e3826d3dd4f2095e8463a48fc
+    home: https://wikiba.se
+    keywords:
+    - wikibase
+    - mediawiki
+    - wikidata
+    - wikimedia
+    name: wikibase
+    sources:
+    - https://github.com/wmde/wikibase-release-pipeline
+    - https://github.com/BHT-Official/Charts
+    urls:
+    - https://github.com/BHT-Official/Helm-Charts/releases/download/wikibase-1.0.2/wikibase-1.0.2.tgz
+    version: 1.0.2
+generated: "2022-08-25T16:03:51.607904623Z"
