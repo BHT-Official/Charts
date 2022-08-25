@@ -1,4 +1,4 @@
-name: Wikibase
+name: wikibase
 description: An un-official ported Wikibase Helm Chart
 version: 1.0.0
 apiVersion: v2
