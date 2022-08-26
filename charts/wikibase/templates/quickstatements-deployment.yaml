@@ -22,9 +22,15 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.quickstatements.affinity "context" $) | nindent 8 }}
     {{- else }}
       affinity:
+      {{- if .Values.quickstatements.podAffinity }}
         podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.quickstatements.podAffinityPreset "component" "quickstatements" "context" $) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.quickstatements.podAntiAffinity }}
         podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.quickstatements.podAntiAffinityPreset "component" "quickstatements" "context" $) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.quickstatements.nodeAffinity }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.quickstatements.nodeAffinityPreset.type "key" .Values.quickstatements.nodeAffinityPreset.key "values" .Values.quickstatements.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
     {{- end }}
     {{- if .Values.quickstatements.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.quickstatements.nodeSelector "context" $) | nindent 8 }}

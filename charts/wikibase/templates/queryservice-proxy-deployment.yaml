@@ -21,9 +21,15 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.queryservice.proxy.affinity "context" $) | nindent 8 }}
     {{- else }}
       affinity:
+      {{- if .Values.queryservice.proxy.podAffinity }}
         podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.queryservice.proxy.podAffinityPreset "component" "queryservice.proxy" "context" $) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.queryservice.proxy.podAntiAffinity }}
         podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.queryservice.proxy.podAntiAffinityPreset "component" "queryservice.proxy" "context" $) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.queryservice.proxy.nodeAffinity }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.queryservice.proxy.nodeAffinityPreset.type "key" .Values.queryservice.proxy.nodeAffinityPreset.key "values" .Values.queryservice.proxy.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
     {{- end }}
     {{- if .Values.queryservice.proxy.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.queryservice.proxy.nodeSelector "context" $) | nindent 8 }}
