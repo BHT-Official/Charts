@@ -17,6 +17,31 @@ spec:
         app: queryservice-ui
         {{- include "wikibase.labels" . | nindent 8 }}
     spec:
+    {{- if .Values.queryservice.ui.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.queryservice.ui.affinity "context" $) | nindent 8 }}
+    {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.queryservice.ui.podAffinityPreset "component" "queryservice.ui" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.queryservice.ui.podAntiAffinityPreset "component" "queryservice.ui" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.queryservice.ui.nodeAffinityPreset.type "key" .Values.queryservice.ui.nodeAffinityPreset.key "values" .Values.queryservice.ui.nodeAffinityPreset.values) | nindent 10 }}
+    {{- end }}
+    {{- if .Values.queryservice.ui.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.queryservice.ui.nodeSelector "context" $) | nindent 8 }}
+    {{- end }}
+    {{- if .Values.queryservice.ui.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.queryservice.ui.tolerations "context" $) | nindent 8 }}
+    {{- end }}
+    {{- if .Values.queryservice.ui.schedulerName }}
+      schedulerName: {{ .Values.queryservice.ui.schedulerName }}
+    {{- end }}
+    {{- if .Values.queryservice.ui.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.queryservice.ui.topologySpreadConstraints "context" $) | nindent 8 }}
+    {{- end }}
+    {{- if .Values.queryservice.ui.priorityClassName }}
+      priorityClassName: {{ .Values.queryservice.ui.priorityClassName | quote }}
+    {{- else if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName | quote }}
+    {{- end }}
       containers:
         - name: queryservice-ui
           env:

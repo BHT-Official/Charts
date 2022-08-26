@@ -18,6 +18,31 @@ spec:
         app: quickstatements
         {{- include "wikibase.labels" . | nindent 8 }}
     spec:
+    {{- if .Values.quickstatements.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.quickstatements.affinity "context" $) | nindent 8 }}
+    {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.quickstatements.podAffinityPreset "component" "quickstatements" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.quickstatements.podAntiAffinityPreset "component" "quickstatements" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.quickstatements.nodeAffinityPreset.type "key" .Values.quickstatements.nodeAffinityPreset.key "values" .Values.quickstatements.nodeAffinityPreset.values) | nindent 10 }}
+    {{- end }}
+    {{- if .Values.quickstatements.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.quickstatements.nodeSelector "context" $) | nindent 8 }}
+    {{- end }}
+    {{- if .Values.quickstatements.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.quickstatements.tolerations "context" $) | nindent 8 }}
+    {{- end }}
+    {{- if .Values.quickstatements.schedulerName }}
+      schedulerName: {{ .Values.quickstatements.schedulerName }}
+    {{- end }}
+    {{- if .Values.quickstatements.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.quickstatements.topologySpreadConstraints "context" $) | nindent 8 }}
+    {{- end }}
+    {{- if .Values.quickstatements.priorityClassName }}
+      priorityClassName: {{ .Values.quickstatements.priorityClassName | quote }}
+    {{- else if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName | quote }}
+    {{- end }}
       containers:
         - name: quickstatements
           env:
