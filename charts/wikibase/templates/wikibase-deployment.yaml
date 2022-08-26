@@ -19,6 +19,37 @@ spec:
         app: wikibase
         {{- include "wikibase.labels" . | nindent 8 }}
     spec:
+    {{- if .Values.wikibase.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.wikibase.affinity "context" $) | nindent 8 }}
+    {{- else }}
+      affinity:
+      {{- if .Values.wikibase.podAffinity }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.wikibase.podAffinityPreset "component" "wikibase" "context" $) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.wikibase.podAntiAffinity }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.wikibase.podAntiAffinityPreset "component" "wikibase" "context" $) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.wikibase.nodeAffinity }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.wikibase.nodeAffinityPreset.type "key" .Values.wikibase.nodeAffinityPreset.key "values" .Values.wikibase.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+    {{- end }}
+    {{- if .Values.wikibase.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.wikibase.nodeSelector "context" $) | nindent 8 }}
+    {{- end }}
+    {{- if .Values.wikibase.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.wikibase.tolerations "context" $) | nindent 8 }}
+    {{- end }}
+    {{- if .Values.wikibase.schedulerName }}
+      schedulerName: {{ .Values.wikibase.schedulerName }}
+    {{- end }}
+    {{- if .Values.wikibase.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.wikibase.topologySpreadConstraints "context" $) | nindent 8 }}
+    {{- end }}
+    {{- if .Values.wikibase.priorityClassName }}
+      priorityClassName: {{ .Values.wikibase.priorityClassName | quote }}
+    {{- else if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName | quote }}
+    {{- end }}
       containers:
         - name: wikibase
           env:

@@ -16,6 +16,37 @@ spec:
         app: queryservice-updater
         {{- include "wikibase.labels" . | nindent 8 }}
     spec:
+    {{- if .Values.queryservice.updater.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.queryservice.updater.affinity "context" $) | nindent 8 }}
+    {{- else }}
+      affinity:
+      {{- if .Values.queryservice.updater.podAffinity }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.queryservice.updater.podAffinityPreset "component" "queryservice.updater" "context" $) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.queryservice.updater.podAntiAffinity }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.queryservice.updater.podAntiAffinityPreset "component" "queryservice.updater" "context" $) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.queryservice.updater.nodeAffinity }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.queryservice.updater.nodeAffinityPreset.type "key" .Values.queryservice.updater.nodeAffinityPreset.key "values" .Values.queryservice.updater.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+    {{- end }}
+    {{- if .Values.queryservice.updater.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.queryservice.updater.nodeSelector "context" $) | nindent 8 }}
+    {{- end }}
+    {{- if .Values.queryservice.updater.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.queryservice.updater.tolerations "context" $) | nindent 8 }}
+    {{- end }}
+    {{- if .Values.queryservice.updater.schedulerName }}
+      schedulerName: {{ .Values.queryservice.updater.schedulerName }}
+    {{- end }}
+    {{- if .Values.queryservice.updater.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.queryservice.updater.topologySpreadConstraints "context" $) | nindent 8 }}
+    {{- end }}
+    {{- if .Values.queryservice.updater.priorityClassName }}
+      priorityClassName: {{ .Values.queryservice.updater.priorityClassName | quote }}
+    {{- else if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName | quote }}
+    {{- end }}
       containers:
         - name: queryservice-updater
           args:

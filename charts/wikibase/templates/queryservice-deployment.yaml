@@ -19,6 +19,37 @@ spec:
         app: queryservice
         {{- include "wikibase.labels" . | nindent 8 }}
     spec:
+    {{- if .Values.queryservice.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.queryservice.affinity "context" $) | nindent 8 }}
+    {{- else }}
+      affinity:
+      {{- if .Values.queryservice.podAffinity }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.queryservice.podAffinityPreset "component" "queryservice" "context" $) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.queryservice.podAntiAffinity }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.queryservice.podAntiAffinityPreset "component" "queryservice" "context" $) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.queryservice.nodeAffinity }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.queryservice.nodeAffinityPreset.type "key" .Values.queryservice.nodeAffinityPreset.key "values" .Values.queryservice.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+    {{- end }}
+    {{- if .Values.queryservice.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.queryservice.nodeSelector "context" $) | nindent 8 }}
+    {{- end }}
+    {{- if .Values.queryservice.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.queryservice.tolerations "context" $) | nindent 8 }}
+    {{- end }}
+    {{- if .Values.queryservice.schedulerName }}
+      schedulerName: {{ .Values.queryservice.schedulerName }}
+    {{- end }}
+    {{- if .Values.queryservice.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.queryservice.topologySpreadConstraints "context" $) | nindent 8 }}
+    {{- end }}
+    {{- if .Values.queryservice.priorityClassName }}
+      priorityClassName: {{ .Values.queryservice.priorityClassName | quote }}
+    {{- else if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName | quote }}
+    {{- end }}
       containers:
         - name: queryservice
           args:
